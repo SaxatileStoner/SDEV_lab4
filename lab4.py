@@ -3,7 +3,7 @@
 * Building Secure Python Applications - SDEV 300
 *
 * @author Christopher Stoner
-* 
+*
 * Consists of three main parts
 * 1) Allows user to enter and validate their phone number and zipcode+4
         Then the user will enter values of two, 3 x 3 matrices and then select from options:
@@ -12,23 +12,22 @@
             c) Matrix Multiplication
             d) Element by element multiplication
         should use numpy.matmul() for matrix multiplcation
-        should compute the appropriate results, and return results, 
+        should compute the appropriate results, and return results,
             the transponse of the results, and the mean of the rows for the results,
             and the mean of the columns for the results
 
 * 2) Document your testing results using your programming environment.
         Include and discuss your pylint results for the application.
-        
+
 * 3) Password cracker using Python code.
-        
 """
 
-import numpy as np
 import re
+import numpy as np
 
 
 def promt_y_n():
-    """Runs through promts for yes or no, 
+    """Runs through promts for yes or no,
     returns capitalized letter Y or N.
 
     Returns:
@@ -38,7 +37,7 @@ def promt_y_n():
     while True:
         try:
             ans = str(input("> ")).capitalize()
-            if ans == 'Y' or ans == 'N':  # This is an acceptable answer
+            if ans in ('Y', 'N'):  # This is an acceptable answer
                 return ans
             continue
         except TypeError:
@@ -47,9 +46,9 @@ def promt_y_n():
 
 
 def to_3x3_matrix(row_1, row_2, row_3):
-    """Takes strings that represent rows in a matrix, 
+    """Takes strings that represent rows in a matrix,
     converts each row into an array with .split, then
-    returns a array object  
+    returns a array object
 
     Args:
         row_1 (str): Row 1 of Matrix
@@ -67,14 +66,14 @@ def to_3x3_matrix(row_1, row_2, row_3):
 
 
 def input_row():
-    """Runs through promt to get and check if inputed data is 
+    """Runs through promt to get and check if inputed data is
     a row representing a matrix row
 
     Returns:
         str: returns a string of numbers seperated by a whitespace character
         This represents a row in a matrix
     """
-    regex_row = "^\d+\s\d+\s\d+$"
+    regex_row = r"^\d+\s\d+\s\d+$"
     while True:
         try:
             row = str(input("> "))
@@ -94,13 +93,13 @@ def main():
     # ---- PHONE NUMBER STARTS ---- #
     print("Would you like to continue?\n")
     ans = promt_y_n()
-    if(ans == 'N'):
+    if ans == 'N':
         return
     print("\nEnter your phone number (XXX-XXX-XXXX): ")
     while True:
         try:
             phone_num = str(input("> "))
-            if(re.match("^\d{3}-\d{3}-\d{4}$", phone_num)):
+            if re.match(r"^\d{3}-\d{3}-\d{4}$", phone_num):
                 break
             print("\nNot a valid phone number. Renter: \n")
             continue
@@ -112,7 +111,7 @@ def main():
     while True:
         try:
             zip_code = str(input("> "))
-            if(re.match("^\d{5}-\d{4}$", zip_code)):
+            if re.match(r"^\d{5}-\d{4}$", zip_code):
                 break
             print("\nNot a valid zip code. Renter: \n")
             continue
@@ -138,7 +137,8 @@ def main():
         # Might make the print statement more user friendly,
         # but this is good enough for debugging
 
-        print("\nEnter your second 3x3 matrix one row at a time, each row seperated by an enter: \n")
+        print("\nEnter your second 3x3 matrix one row at a time," +
+              " each row seperated by an enter: \n")
         str_row_1 = input_row()
         str_row_2 = input_row()
         str_row_3 = input_row()
@@ -150,13 +150,14 @@ def main():
         # OPERATION ON MATRIX #
         valid_operators = ["A", "B", "C", "D"]
         print("\nSelect a Matrix Operation from the list below: \n")
-        print("a. Addition\nb. Subtraction\nc. Matrix Multiplication\nd. Element by element multiplication\n")
+        print("a. Addition\nb. Subtraction\nc. Matrix Multiplication" +
+              "\nd. Element by element multiplication\n")
         flag = True
         while flag:
             try:
                 operation = str(input("> ")).capitalize()
-                for op in valid_operators:
-                    if op == operation:
+                for operator in valid_operators:
+                    if operator == operation:
                         flag = False
                         break
                 if flag:
@@ -191,6 +192,7 @@ def main():
         print("\nThe transpose is: \n")
         print(np.transpose(result))
 
+        # Print row and column mean values of the results, then repeat loop
         print("\nThe row and column mean values of the results are: \n")
 
         row_mean = np.mean(result, axis=1)
